@@ -55,6 +55,7 @@ public class TextSpinnerLinerLayout extends LinearLayout{
                     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                                int arg2, long arg3) {
                         position = spinner.getSelectedItemPosition();
+                        Log.d(TAG, String.valueOf(position));
                         // TODO Auto-generated method stub
                     }
 
@@ -112,4 +113,6 @@ public class TextSpinnerLinerLayout extends LinearLayout{
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), resourse, spinnerArray);
         getSpinner().setAdapter(adapter);
     }
+
+
 }
