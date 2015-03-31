@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
 
-    private static final String TAG = "myLogs";
+    private static final String TAG = "MainActivity";
 
 
     public static int idNum = 1000;
@@ -141,7 +141,7 @@ public class MainActivity extends Activity {
 
 
 
-        ArrayAdapter<String> cutErrorAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, cutError);
+        ArrayAdapter<String> cutErrorAdapter = new ArrayAdapter<String>(this, R.layout.ss, cutError);
       final  ArrayAdapter<String> wallLenghAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, wallLength);
       final  ArrayAdapter<String> shortWallLenghAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, shortWallLength);
         ArrayAdapter<String> bulkLenghAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, bulkLength);
@@ -607,8 +607,21 @@ public class MainActivity extends Activity {
         parent.addView(new TextEditTextLinerLayout(this,"Количество этажей данного типа", "1", "x", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL, 1 ));
         parent.addView(new TextEditTextLinerLayout(this, "Высота от пола до потолка, м", null, "xx.x", InputType.TYPE_CLASS_NUMBER, 4));
         parent.addView(new TextEditTextLinerLayout(this,"Длина наружных несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER , 6 ));
-        parent.addView(new TextSpinnerLinerLayout(this));
+        parent.addView(new TextSpinnerLinerLayout(this, "Толщина наружной несущей стены, мм", R.layout.ss, wallLength));
+        parent.addView(new TextEditTextLinerLayout(this,"Длина внутренних несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER , 6 ));
+        parent.addView(new TextSpinnerLinerLayout(this, "Толщина внутренней несущей стены, мм", R.layout.ss, wallLength));
+        parent.addView(new TextEditTextLinerLayout(this,"Длина перегородок, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER , 6 ));
+        parent.addView(new TextSpinnerLinerLayout(this, "Толщина перегородки, мм", R.layout.ss, bulkLength));
+        parent.addView(new TextSpinnerLinerLayout(this, "U-блок для армопояса", R.layout.ss, noYes));
 
+        parent.addView(new TextSpinnerLinerLayout(this, "Наличие перекрытия", R.layout.ss, noYes));
+        if(((TextSpinnerLinerLayout)parent.getChildAt(8)).getPosition() == 0){
+            ((TextSpinnerLinerLayout)parent.getChildAt(3)).setAdapter(wallLength);
+            ((TextSpinnerLinerLayout)parent.getChildAt(5)).setAdapter(wallLength);
+        }else if(((TextSpinnerLinerLayout)parent.getChildAt(8)).getPosition() == 1){
+            ((TextSpinnerLinerLayout)parent.getChildAt(3)).setAdapter(shortWallLength);
+            ((TextSpinnerLinerLayout)parent.getChildAt(5)).setAdapter(shortWallLength);
+        }
 
 //       if(findViewById(R.id.level2).getVisibility() == View.GONE){
 //           findViewById(R.id.level2).setVisibility(View.VISIBLE);

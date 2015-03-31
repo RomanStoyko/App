@@ -1,11 +1,8 @@
 package com.storoman.app;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,18 +16,18 @@ import android.widget.TextView;
 
 public class TextSpinnerLinerLayout extends LinearLayout{
 
+    private static final String TAG = "TextSpinnerLinerLayout";
+
     private View focus;
+    private int resourse = R.layout.ss;
     private int id;
+    private int position;
     private TextView textView;
     private Spinner spinner;
     private String[] spinnerArray = {
             "200",
             "250",
-            "300",
-            "350",
-            "375",
-            "400",
-            "500"};
+    };
 
 
     public TextSpinnerLinerLayout(Context context) {
@@ -48,15 +45,16 @@ public class TextSpinnerLinerLayout extends LinearLayout{
         String text = "text";
         textView.setText(text);
 
+        spinner = (Spinner) getChildAt(1);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, resourse, spinnerArray);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                                int arg2, long arg3) {
-
+                        position = spinner.getSelectedItemPosition();
                         // TODO Auto-generated method stub
                     }
 
@@ -85,11 +83,33 @@ public class TextSpinnerLinerLayout extends LinearLayout{
     }
 
 
-    public TextSpinnerLinerLayout(Context context, String text, String editText, String hint, int inputType, int length) {
+    public TextSpinnerLinerLayout(Context context, String text, int resourse, String[] spinnerArray) {
         this(context);
         textView.setText(text);
-
+        this.resourse = resourse;
+        setAdapter(spinnerArray);
     }
 
 
+    public int getPosition() {
+        return position;
+    }
+
+    public View getFocus() {
+        return focus;
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
+    public Spinner getSpinner() {
+        return spinner;
+    }
+
+    public void setAdapter (String[] spinnerArray){
+        Log.d(TAG, "setAdapter");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), resourse, spinnerArray);
+        getSpinner().setAdapter(adapter);
+    }
 }
