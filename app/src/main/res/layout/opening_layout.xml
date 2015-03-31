@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="4"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:text="Высота проёма, м"
+        android:textSize="12sp"
+        />
+
+
+    <com.storoman.app.EditTextExtended
+        android:focusable="true"
+        android:layout_width="60dp"
+        android:hint="x.xx"
+        android:layout_height="match_parent"
+        android:inputType="numberDecimal"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@drawable/rect_text_edir"
+        android:textColor="@android:color/black"
+        android:maxLength="4"
+        android:layout_margin="2dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="4"
+        android:text="Ширина проёма, м"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:textSize="12sp"
+        />
+
+    <com.storoman.app.EditTextExtended
+        android:focusable="true"
+        android:layout_width="60dp"
+        android:hint="x.xx"
+        android:layout_height="match_parent"
+        android:inputType="numberDecimal"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@drawable/rect_text_edir"
+        android:textColor="@android:color/black"
+        android:maxLength="4"
+        android:layout_margin="2dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:onClick="hide"/>
+
+
+</merge>
