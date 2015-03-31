@@ -604,6 +604,7 @@ public class MainActivity extends Activity {
 
         Log.d(TAG, "addLevel");
        final LinearLayout parentLay = (LinearLayout) findViewById(R.id.addlevel);
+
         parentLay.addView(new TextEditTextLinerLayout(this, "Количество этажей данного типа", "1", "x", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL, 1));
         parentLay.addView(new TextEditTextLinerLayout(this, "Высота от пола до потолка, м", null, "xx.x", InputType.TYPE_CLASS_NUMBER, 4));
         parentLay.addView(new TextEditTextLinerLayout(this, "Длина наружных несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
