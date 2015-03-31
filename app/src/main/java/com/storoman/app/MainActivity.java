@@ -621,8 +621,8 @@ public class MainActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, String.valueOf(position));
                 if(position == 0){
-                    ((TextSpinnerLinerLayout) parentLay.getChildAt(3)).setAdapter(wallLength);
-                    ((TextSpinnerLinerLayout) parentLay.getChildAt(5)).setAdapter(wallLength);
+                    ((TextSpinnerLinerLayout) parentLay.getChildAt(3)).setAdapter(getResources().getStringArray(R.array.wallLength));
+                    ((TextSpinnerLinerLayout) parentLay.getChildAt(5)).setAdapter(getResources().getStringArray(R.array.wallLength));
                 }
                 if(position == 1){
                     ((TextSpinnerLinerLayout)parentLay.getChildAt(3)).setAdapter(shortWallLength);
