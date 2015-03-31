@@ -636,6 +636,7 @@ public class MainActivity extends Activity {
             }
         });
 
+        parentLay.addView(new TextButtonLinerLayout(this, "Проёмы в наружных стенах", null));
 
 //       if(findViewById(R.id.level2).getVisibility() == View.GONE){
 //           findViewById(R.id.level2).setVisibility(View.VISIBLE);
