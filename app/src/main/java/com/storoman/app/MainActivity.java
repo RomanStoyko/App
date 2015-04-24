@@ -33,7 +33,7 @@ import java.util.Map;
 public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
-
+    public static int levelIndex = 2;
 
     public static int idNum = 1000;
     final Map<View, View> layoutMap = new HashMap<>();
@@ -360,122 +360,10 @@ public class MainActivity extends Activity {
         LinearLayout parent = (LinearLayout) layoutMap.get(view);
         ArrayList<int[]> list = arrayListMap.get(view);
 
-//
-//        LinearLayout linearLayout = new LinearLayout(this);
-//        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        linearLayout.setVisibility(View.VISIBLE);
-//        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         OpeningLinerLayout oLL = new OpeningLinerLayout(this);
         parent.addView(oLL);
         list.add(oLL.getIdEdit());
 
-
-//        parent.addView(linearLayout);
-//
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT, 4.0f);
-//        TextView tx1 = new TextView(this);
-//        int pading = (int)  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
-//        tx1.setPadding(pading, pading, pading, pading);
-//        tx1.setText("Высота проёма, м");
-//        tx1.setLayoutParams(params);
-//        tx1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-//        tx1.setGravity(Gravity.TOP);
-//
-//        TextView tx2 = new TextView(this);
-//        tx2.setPadding(pading, pading, pading, pading);
-//        tx2.setText("Ширина проёма, м");
-//        tx2.setLayoutParams(params);
-//        tx2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-//        tx1.setGravity(Gravity.TOP);
-//
-//        InputFilter[] fArray = new InputFilter[1];
-//        fArray[0] = new InputFilter.LengthFilter(4);
-//
-//        int px = (int)  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 75, getResources().getDisplayMetrics());
-//        params = new LinearLayout.LayoutParams(px, LinearLayout.LayoutParams.FILL_PARENT, 1.0f);
-//        params.setMargins(5, 5, 5, 5);
-//        final EditTextExtended ex1 = new EditTextExtended(this);
-//        ex1.setLayoutParams(params);
-//        ex1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-//        ex1.setFocusable(true);
-//        ex1.setBackgroundResource(R.drawable.rect_text_edir);
-//        ex1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-//        ex1.setFilters(fArray);
-//        ex1.setHint("xx.x");
-//
-//        ex1.addTextChangedListener(TWlistner);
-//        ex1.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                    focus = ex1;
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    ex1.setBackgroundResource(R.drawable.rect_text_edir);
-//                focus = ex1;
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//        int ex1id = i;i++;
-//        ex1.setId(ex1id);
-//
-//
-//        final EditTextExtended ex2 = new EditTextExtended(this);
-//        ex2.setLayoutParams(params);
-//        ex2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-//        ex2.setFocusable(true);
-//        ex2.setBackgroundResource(R.drawable.rect_text_edir);
-//        ex2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-//        ex2.setFilters(fArray);
-//
-//        ex2.setHint("xx.x");
-//        ex2.addTextChangedListener(TWlistner);
-//        ex2.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                focus = ex2;
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                ex2.setBackgroundResource(R.drawable.rect_text_edir);
-//                focus = ex2;
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//        int ex2id = i;i++;
-//        ex2.setId(ex2id);
-//
-//
-//
-//        list.add(new int[]{ex1.getId(), ex2.getId()});
-//
-//        Button bt = new Button(this);
-//        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        bt.setLayoutParams(params);
-//        bt.setText("X");
-//        bt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                hide(v);
-//            }
-//        });
-//
-//
-//        linearLayout.addView(tx1);
-//        linearLayout.addView(ex1);
-//        linearLayout.addView(tx2);
-//        linearLayout.addView(ex2);
-//        linearLayout.addView(bt);
 
     }
 
@@ -605,47 +493,11 @@ public class MainActivity extends Activity {
         Log.d(TAG, "addLevel");
        final LinearLayout parentLay = (LinearLayout) findViewById(R.id.addlevel);
 
-        parentLay.addView(new TextEditTextLinerLayout(this, "Количество этажей данного типа", "1", "x", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL, 1));
-        parentLay.addView(new TextEditTextLinerLayout(this, "Высота от пола до потолка, м", null, "xx.x", InputType.TYPE_CLASS_NUMBER, 4));
-        parentLay.addView(new TextEditTextLinerLayout(this, "Длина наружных несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
-        parentLay.addView(new TextSpinnerLinerLayout(this, "Толщина наружной несущей стены, мм", R.layout.ss, wallLength));
-        parentLay.addView(new TextEditTextLinerLayout(this, "Длина внутренних несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
-        parentLay.addView(new TextSpinnerLinerLayout(this, "Толщина внутренней несущей стены, мм", R.layout.ss, wallLength));
-        parentLay.addView(new TextEditTextLinerLayout(this, "Длина перегородок, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
-        parentLay.addView(new TextSpinnerLinerLayout(this, "Толщина перегородки, мм", R.layout.ss, bulkLength));
-        parentLay.addView(new TextSpinnerLinerLayout(this, "U-блок для армопояса", R.layout.ss, noYes));
+        if(levelIndex <= 4) {
+            parentLay.addView(new LevelLayout(this));
+            Log.d(TAG, String.valueOf(levelIndex));
+        }
 
-        parentLay.addView(new TextSpinnerLinerLayout(this, "Наличие перекрытия", R.layout.ss, noYes));
-        ((TextSpinnerLinerLayout)parentLay.getChildAt(8)).getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, String.valueOf(position));
-                if(position == 0){
-                    ((TextSpinnerLinerLayout) parentLay.getChildAt(3)).setAdapter(getResources().getStringArray(R.array.wallLength));
-                    ((TextSpinnerLinerLayout) parentLay.getChildAt(5)).setAdapter(getResources().getStringArray(R.array.wallLength));
-                }
-                if(position == 1){
-                    ((TextSpinnerLinerLayout)parentLay.getChildAt(3)).setAdapter(shortWallLength);
-                    ((TextSpinnerLinerLayout)parentLay.getChildAt(5)).setAdapter(shortWallLength);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        parentLay.addView(new TextButtonLinerLayout(this, "Проёмы в наружных стенах", null));
-        parentLay.addView(new LinearLayout(this));
-
-//       if(findViewById(R.id.level2).getVisibility() == View.GONE){
-//           findViewById(R.id.level2).setVisibility(View.VISIBLE);
-//       }else if(findViewById(R.id.level3).getVisibility() == View.GONE){
-//           findViewById(R.id.level3).setVisibility(View.VISIBLE);
-//       }else{
-//
-//       }
 
     }
 

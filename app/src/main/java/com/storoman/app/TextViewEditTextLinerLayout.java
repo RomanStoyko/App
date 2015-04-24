@@ -14,14 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class TextEditTextLinerLayout extends LinearLayout{
+public class TextViewEditTextLinerLayout extends LinearLayout{
 
     private View focus = null;
     private int id;
     private TextView textView;
     private EditTextExtended editTextExtended;
 
-    public TextEditTextLinerLayout(Context context) {
+    public TextViewEditTextLinerLayout(Context context) {
         this(context, null);
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
@@ -73,14 +73,14 @@ public class TextEditTextLinerLayout extends LinearLayout{
 
     }
 
-    public TextEditTextLinerLayout(Context context, AttributeSet attrs) {
+    public TextViewEditTextLinerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
 
     }
 
 
-    public TextEditTextLinerLayout(Context context, String text, String editText,String hint, int inputType, int length) {
+    public TextViewEditTextLinerLayout(Context context, String text, String editText, String hint, int inputType, int length) {
         this(context);
         textView.setText(text);
         editTextExtended.setHint(hint);

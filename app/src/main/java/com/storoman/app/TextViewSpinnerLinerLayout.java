@@ -13,15 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-
-public class TextSpinnerLinerLayout extends LinearLayout{
+public class TextViewSpinnerLinerLayout extends LinearLayoutChild{
 
     private static final String TAG = "TextSpinnerLinerLayout";
 
-    private View focus;
     private int resourse = R.layout.ss;
-    private int id;
     private int position;
+    private String spinnerText;
     private TextView textView;
     private Spinner spinner;
     private String[] spinnerArray = {
@@ -30,7 +28,7 @@ public class TextSpinnerLinerLayout extends LinearLayout{
     };
 
 
-    public TextSpinnerLinerLayout(Context context) {
+    public TextViewSpinnerLinerLayout(Context context) {
         this(context, null);
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
@@ -55,6 +53,7 @@ public class TextSpinnerLinerLayout extends LinearLayout{
                     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                                int arg2, long arg3) {
                         position = spinner.getSelectedItemPosition();
+                        spinnerText = (String)spinner.getSelectedItem();
                         Log.d(TAG, String.valueOf(position));
                         // TODO Auto-generated method stub
                     }
@@ -68,23 +67,17 @@ public class TextSpinnerLinerLayout extends LinearLayout{
 
 
 
-        spinner.setId(MainActivity.idNum);
-        MainActivity.idNum++;
-
-
-
-
 
     }
 
-    public TextSpinnerLinerLayout(Context context, AttributeSet attrs) {
+    public TextViewSpinnerLinerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
 
     }
 
 
-    public TextSpinnerLinerLayout(Context context, String text, int resourse, String[] spinnerArray) {
+    public TextViewSpinnerLinerLayout(Context context, String text, int resourse, String[] spinnerArray) {
         this(context);
         textView.setText(text);
         this.resourse = resourse;
@@ -96,9 +89,6 @@ public class TextSpinnerLinerLayout extends LinearLayout{
         return position;
     }
 
-    public View getFocus() {
-        return focus;
-    }
 
     public TextView getTextView() {
         return textView;
@@ -114,5 +104,21 @@ public class TextSpinnerLinerLayout extends LinearLayout{
         getSpinner().setAdapter(adapter);
     }
 
+    @Override
+    public View getFill() {
+        return null;
+    }
 
+    @Override
+    public double getCalclation() {
+        try {
+            double res = Double.parseDouble(spinnerText);
+            Log.d(TAG, "spinner number");
+            return res;
+        } catch (NumberFormatException e) {
+            Log.d(TAG, "spinner not number");
+            return 1.0;
+        }
+
+    }
 }

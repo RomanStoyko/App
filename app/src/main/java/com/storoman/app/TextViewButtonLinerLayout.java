@@ -1,29 +1,23 @@
 package com.storoman.app;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class TextButtonLinerLayout extends LinearLayout{
+public class TextViewButtonLinerLayout extends LinearLayoutChild{
 
     private View focus = null;
     private int id;
     private TextView textView;
     private Button button;
 
-    public TextButtonLinerLayout(Context context) {
+    public TextViewButtonLinerLayout(Context context) {
         this(context, null);
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
@@ -42,21 +36,52 @@ public class TextButtonLinerLayout extends LinearLayout{
 
     }
 
-    public TextButtonLinerLayout(Context context, AttributeSet attrs) {
+    public TextViewButtonLinerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
 
     }
 
-    public TextButtonLinerLayout(Context context, String text, String ButtonText) {
+    public TextViewButtonLinerLayout(Context context, String text, String buttonText) {
         this(context);
         textView.setText(text);
-
+        button.setText(buttonText);
     }
+
 
 
 
     public View getFocus() {
         return focus;
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
+    public Button getButton() {
+        return button;
+    }
+
+//    @Override
+//    public View getFill() {
+//        if(textView.getText().toString().equals("")){
+//            textView.setBackgroundResource(R.drawable.rect_text_edir_error);
+//            return textView;
+//        }else{
+//            return null;
+//        }
+//
+//    }
+
+
+    @Override
+    public View getFill() {
+        return null;
+    }
+
+    @Override
+    public double getCalclation() {
+        return 1.0;
     }
 }

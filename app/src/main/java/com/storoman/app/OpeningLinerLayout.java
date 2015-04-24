@@ -18,10 +18,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class OpeningLinerLayout extends LinearLayout{
+public class OpeningLinerLayout extends LinearLayoutChild{
 
 
-    private View focus;
+    private View focus = null;
+    private EditTextExtended eTE1, eTE2;
+    private EditTextExtended[] eTEArray = new EditTextExtended[2];
     private int[] idEdit = new int[2];
 
     public OpeningLinerLayout(Context context) {
@@ -39,7 +41,8 @@ public class OpeningLinerLayout extends LinearLayout{
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.opening_layout, this, true);
-        ((EditTextExtended) getChildAt(1)).addTextChangedListener(new TextWatcher() {
+        eTE1 = (EditTextExtended)getChildAt(1);
+        eTE1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 focus = getChildAt(1);
@@ -57,7 +60,8 @@ public class OpeningLinerLayout extends LinearLayout{
             }
         });
 
-        ((EditTextExtended) getChildAt(3)).addTextChangedListener(new TextWatcher() {
+        eTE2 = (EditTextExtended) getChildAt(3);
+        eTE2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 focus = getChildAt(3);
@@ -75,16 +79,36 @@ public class OpeningLinerLayout extends LinearLayout{
             }
         });
 
-        getChildAt(1).setId(MainActivity.idNum);MainActivity.idNum++;
+        eTE1.setId(MainActivity.idNum);MainActivity.idNum++;
+        eTE2.setId(MainActivity.idNum);MainActivity.idNum++;
 
-        getChildAt(3).setId(MainActivity.idNum);MainActivity.idNum++;
+        idEdit[0] =  eTE1.getId();
+        idEdit[1] =  eTE2.getId();
 
-        idEdit[0] =  getChildAt(1).getId();
-        idEdit[1] =  getChildAt(3).getId();
+        eTEArray[0] = eTE1;
+        eTEArray[1] = eTE2;
+
     }
 
 
     public int[] getIdEdit() {
         return idEdit;
+    }
+
+    @Override
+    public View getFill() {
+        for(EditTextExtended ete : eTEArray ){
+            if(null == focus){
+                focus = ete;
+            }
+        }
+        return focus;
+    }
+
+    @Override
+    public double getCalclation() {
+        double d1 = Double.parseDouble(eTE1.getText().toString());
+        double d2 = Double.parseDouble(eTE2.getText().toString());
+        return d1 *d2 ;
     }
 }
