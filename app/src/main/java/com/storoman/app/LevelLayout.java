@@ -45,8 +45,6 @@ public class LevelLayout extends LinearLayout{
             }
         });
 
-//        f
-
 
         addView(new TextViewEditTextLinerLayout(getContext(), "Количество этажей данного типа", "1", "x", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL, 1));
         addView(new TextViewEditTextLinerLayout(getContext(), "Высота от пола до потолка, м", null, "xx.x", InputType.TYPE_CLASS_NUMBER, 4));
