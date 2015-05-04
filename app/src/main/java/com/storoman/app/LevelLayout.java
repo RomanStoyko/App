@@ -13,13 +13,14 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 
-public class LevelLayout extends LinearLayout{
+public class LevelLayout extends LinearLayoutChild{
 
     private static final String TAG = "LevelLayout";
 
     ArrayList<int[]> openingFirstEdittextId = new ArrayList<>();
     ArrayList<int[]> openingSecondEdittextId = new ArrayList<>();
     ArrayList<int[]> openingTherdEdittextId = new ArrayList<>();
+    ArrayList<? super LinearLayoutChild> child = new ArrayList<>();
 
     public LevelLayout(Context context) {
         super(context);
@@ -27,15 +28,15 @@ public class LevelLayout extends LinearLayout{
 
         setOrientation(LinearLayout.VERTICAL);
         setGravity(Gravity.CENTER_VERTICAL);
-
+//0
         addView(new TextViewButtonLinerLayout(getContext(), "Тип Этажа " + MainActivity.levelIndex, "X"));
         MainActivity.levelIndex++;
 
         ((TextViewButtonLinerLayout) getChildAt(0)).getTextView().setGravity(Gravity.CENTER);
         ((TextViewButtonLinerLayout) getChildAt(0)).getButton().setLayoutParams(
                 new LinearLayout.LayoutParams(
-                (int)  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75,
-                                                 getResources().getDisplayMetrics()), ViewGroup.LayoutParams.WRAP_CONTENT));
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75,
+                                getResources().getDisplayMetrics()), ViewGroup.LayoutParams.WRAP_CONTENT));
 
         ((TextViewButtonLinerLayout) getChildAt(0)).getButton().setOnClickListener(new OnClickListener() {
             @Override
@@ -45,15 +46,23 @@ public class LevelLayout extends LinearLayout{
             }
         });
 
-
+//1
         addView(new TextViewEditTextLinerLayout(getContext(), "Количество этажей данного типа", "1", "x", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL, 1));
+        //2
         addView(new TextViewEditTextLinerLayout(getContext(), "Высота от пола до потолка, м", null, "xx.x", InputType.TYPE_CLASS_NUMBER, 4));
+//3
         addView(new TextViewEditTextLinerLayout(getContext(), "Длина наружных несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
+//4
         addView(new TextViewSpinnerLinerLayout(getContext(), "Толщина наружной несущей стены, мм", R.layout.ss, getResources().getStringArray(R.array.wallLength)));
+        //5
         addView(new TextViewEditTextLinerLayout(getContext(), "Длина внутренних несущих стен, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
+   //6
         addView(new TextViewSpinnerLinerLayout(getContext(), "Толщина внутренней несущей стены, мм", R.layout.ss, getResources().getStringArray(R.array.wallLength)));
+     //7
         addView(new TextViewEditTextLinerLayout(getContext(), "Длина перегородок, м", null, "xxxx.x", InputType.TYPE_CLASS_NUMBER, 6));
-        addView(new TextViewSpinnerLinerLayout(getContext(), "Толщина перегородки, мм", R.layout.ss,  getResources().getStringArray(R.array.bulkLength)));
+     //8
+        addView(new TextViewSpinnerLinerLayout(getContext(), "Толщина перегородки, мм", R.layout.ss, getResources().getStringArray(R.array.bulkLength)));
+     //9
         addView(new TextViewSpinnerLinerLayout(getContext(), "U-блок для армопояса", R.layout.ss, getResources().getStringArray(R.array.noYes)));
         ((TextViewSpinnerLinerLayout)getChildAt(9)).getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -78,26 +87,27 @@ public class LevelLayout extends LinearLayout{
         addView(new TextViewSpinnerLinerLayout(context, "Наличие перекрытия", R.layout.ss, getResources().getStringArray(R.array.noYes)));
         addView(new TextViewSpinnerLinerLayout(context, "Толщина блоков в уровне перекрытия", R.layout.ss, getResources().getStringArray(R.array.blockLength)));
         ((TextViewSpinnerLinerLayout)getChildAt(10)).getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                getChildAt(11).setVisibility(View.GONE);
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    getChildAt(11).setVisibility(View.GONE);
+
+                }
+                if (position == 1) {
+                    getChildAt(11).setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
-            if (position == 1) {
-                getChildAt(11).setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    });
+        });
 
         //12
         addView(new TextViewButtonLinerLayout(context, "Проёмы в наружных стенах","Добавить проем"));
         addView(new LinearLayout(context));
+        ((LinearLayout) getChildAt(13)).setOrientation(VERTICAL);
         ((TextViewButtonLinerLayout)getChildAt(12)).getButton().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +120,7 @@ public class LevelLayout extends LinearLayout{
         //14
         addView(new TextViewButtonLinerLayout(getContext(), "Проёмы во внутренних несущих стенах", "Добавить проем"));
         addView(new LinearLayout(getContext()));
+        ((LinearLayout) getChildAt(15)).setOrientation(VERTICAL);
         ((TextViewButtonLinerLayout)getChildAt(14)).getButton().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +133,7 @@ public class LevelLayout extends LinearLayout{
          // 16
         addView(new TextViewButtonLinerLayout(getContext(), "Проёмы в перегородках", "Добавить проем"));
         addView(new LinearLayout(getContext()));
+        ((LinearLayout) getChildAt(17)).setOrientation(VERTICAL);
         ((TextViewButtonLinerLayout)getChildAt(16)).getButton().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,16 +145,35 @@ public class LevelLayout extends LinearLayout{
 
         //18
         addView(new LinearLayout(getContext()));
-        getChildAt(18).setLayoutParams( new LinearLayout.LayoutParams(
+        getChildAt(18).setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.FILL_PARENT,
-                (int)  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3,  getResources().getDisplayMetrics()) ));
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics())));
         getChildAt(18).setBackgroundColor(0xffcf0009);
 
+
+        child.add((TextViewEditTextLinerLayout) getChildAt(1));
+        child.add((TextViewEditTextLinerLayout) getChildAt(2));
+        child.add((TextViewEditTextLinerLayout) getChildAt(3));
+        child.add((TextViewSpinnerLinerLayout) getChildAt(4));
+        child.add((TextViewEditTextLinerLayout) getChildAt(5));
+        child.add((TextViewSpinnerLinerLayout) getChildAt(6));
+        child.add((TextViewEditTextLinerLayout) getChildAt(7));
+        child.add((TextViewSpinnerLinerLayout) getChildAt(8));
+        child.add((TextViewSpinnerLinerLayout) getChildAt(10));
+        child.add((TextViewSpinnerLinerLayout) getChildAt(11));
 
 
     }
 
+    @Override
+    public View getFill() {
+        return null;
+    }
 
+    @Override
+    public double getCalclation() {
+        return 0;
+    }
 
 
 }

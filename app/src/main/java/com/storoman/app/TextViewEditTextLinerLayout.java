@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class TextViewEditTextLinerLayout extends LinearLayout{
+public class TextViewEditTextLinerLayout extends LinearLayoutChild{
 
     private View focus = null;
     private int id;
@@ -77,6 +77,16 @@ public class TextViewEditTextLinerLayout extends LinearLayout{
         super(context, attrs);
 
 
+    }
+
+    @Override
+    public View getFill() {
+        return null;
+    }
+
+    @Override
+    public double getCalclation() {
+        return 0;
     }
 
 
