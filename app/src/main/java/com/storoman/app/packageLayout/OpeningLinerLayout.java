@@ -1,30 +1,23 @@
-package com.storoman.app;
+package com.storoman.app.packageLayout;
 
 
 import android.content.Context;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.Map;
+import com.storoman.app.R;
 
-public class OpeningLinerLayout extends LinearLayoutChild{
+public class OpeningLinerLayout extends LinearLayoutChild {
+
 
 
     private View focus = null;
     private EditTextExtended eTE1, eTE2;
     private EditTextExtended[] eTEArray = new EditTextExtended[2];
-    private int[] idEdit = new int[2];
 
     public OpeningLinerLayout(Context context) {
         this(context, null);
@@ -59,6 +52,7 @@ public class OpeningLinerLayout extends LinearLayoutChild{
 
             }
         });
+//        eTE1.addTextChangedListener(TWlistner);
 
         eTE2 = (EditTextExtended) getChildAt(3);
         eTE2.addTextChangedListener(new TextWatcher() {
@@ -78,37 +72,77 @@ public class OpeningLinerLayout extends LinearLayoutChild{
 
             }
         });
-
-        eTE1.setId(MainActivity.idNum);MainActivity.idNum++;
-        eTE2.setId(MainActivity.idNum);MainActivity.idNum++;
-
-        idEdit[0] =  eTE1.getId();
-        idEdit[1] =  eTE2.getId();
+//        eTE2.addTextChangedListener(TWlistner);
 
         eTEArray[0] = eTE1;
         eTEArray[1] = eTE2;
-
-    }
-
-
-    public int[] getIdEdit() {
-        return idEdit;
     }
 
     @Override
     public View getFill() {
+        focus = null;
+
         for(EditTextExtended ete : eTEArray ){
-            if(null == focus){
-                focus = ete;
+            if (ete.getText().toString().equals("")){
+                ete.setBackgroundResource(R.drawable.rect_text_edir_error);
+                if(null == focus){
+                    focus = ete;
+                }
             }
         }
+
+        if(eTE1.getText().toString().equals("") &&eTE2.getText().toString().equals("")){
+            setVisibility(GONE);
+            return null;
+        }
+
         return focus;
     }
 
     @Override
     public double getCalclation() {
-        double d1 = Double.parseDouble(eTE1.getText().toString());
-        double d2 = Double.parseDouble(eTE2.getText().toString());
-        return d1 *d2 ;
+        try {
+            double d1 = Double.parseDouble(eTE1.getText().toString());
+            double d2 = Double.parseDouble(eTE2.getText().toString());
+            return d1 *d2 ;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0.0;
+        }
     }
+
+    @Override
+    public double getCalcWidth() {
+        try {
+            return Double.parseDouble(eTE2.getText().toString())+ 0.5 ;
+        } catch (NumberFormatException e) {
+            return 0;
+
+        }
+
+    }
+
+
+//    TextWatcherExtendedListener TWlistner = new TextWatcherExtendedListener() {
+//
+//
+//        @Override
+//        public void afterTextChanged(View v, Editable s) {
+//
+//            v.setBackgroundResource(R.drawable.rect_text_edir);
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(View v, CharSequence s, int start, int before, int count) {
+//            v.setBackgroundResource(R.drawable.rect_text_edir);
+//
+//        }
+//
+//        @Override
+//        public void beforeTextChanged(View v, CharSequence s, int start, int count, int after) {
+//
+//        }
+//    };
+
 }

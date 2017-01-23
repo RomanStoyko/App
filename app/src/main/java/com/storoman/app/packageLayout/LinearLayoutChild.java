@@ -1,4 +1,4 @@
-package com.storoman.app;
+package com.storoman.app.packageLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -16,4 +16,5 @@ abstract public class LinearLayoutChild extends LinearLayout{
 
     public abstract View getFill();
     public abstract double getCalclation();
+    public abstract double getCalcWidth();
 }

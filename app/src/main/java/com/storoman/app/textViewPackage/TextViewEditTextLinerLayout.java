@@ -1,4 +1,4 @@
-package com.storoman.app;
+package com.storoman.app.textViewPackage;
 
 import android.content.Context;
 import android.text.Editable;
@@ -12,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.storoman.app.packageLayout.EditTextExtended;
+import com.storoman.app.packageLayout.LinearLayoutChild;
+import com.storoman.app.R;
 
 
-public class TextViewEditTextLinerLayout extends LinearLayoutChild{
+public class TextViewEditTextLinerLayout extends LinearLayoutChild {
 
     private View focus = null;
     private int id;
@@ -66,11 +69,6 @@ public class TextViewEditTextLinerLayout extends LinearLayoutChild{
             }
         });
 
-
-        editTextExtended.setId(MainActivity.idNum);
-        MainActivity.idNum++;
-
-
     }
 
     public TextViewEditTextLinerLayout(Context context, AttributeSet attrs) {
@@ -80,13 +78,19 @@ public class TextViewEditTextLinerLayout extends LinearLayoutChild{
     }
 
     @Override
-    public View getFill() {
-        return null;
+    public double getCalcWidth() {
+        return 0;
     }
 
     @Override
     public double getCalclation() {
-        return 0;
+
+        try {
+            return Double.parseDouble(editTextExtended.getText().toString());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return  1.0;
+        }
     }
 
 
@@ -113,7 +117,12 @@ public class TextViewEditTextLinerLayout extends LinearLayoutChild{
         return editTextExtended;
     }
 
-    public View getFocus() {
-        return focus;
+    public View getFill() {
+        if(editTextExtended.getText().toString().equals("")){
+            editTextExtended.setBackgroundResource(R.drawable.rect_text_edir_error);
+            return focus;
+        }
+        return null;
     }
+
 }

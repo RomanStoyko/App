@@ -1,4 +1,4 @@
-package com.storoman.app;
+package com.storoman.app.textViewPackage;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,13 +12,15 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.storoman.app.packageLayout.LinearLayoutChild;
+import com.storoman.app.R;
 
-public class TextViewSpinnerLinerLayout extends LinearLayoutChild{
+public class TextViewSpinnerLinerLayout extends LinearLayoutChild {
 
     private static final String TAG = "TextSpinnerLinerLayout";
 
     private int resourse = R.layout.ss;
-    private int position;
+    private int positions;
     private String spinnerText;
     private TextView textView;
     private Spinner spinner;
@@ -33,7 +35,7 @@ public class TextViewSpinnerLinerLayout extends LinearLayoutChild{
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
 
-        setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, (int)  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics())) );
+        setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics())));
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,23 +49,20 @@ public class TextViewSpinnerLinerLayout extends LinearLayoutChild{
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, resourse, spinnerArray);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        position = spinner.getSelectedItemPosition();
-                        spinnerText = (String)spinner.getSelectedItem();
-                        Log.d(TAG, String.valueOf(position));
-                        // TODO Auto-generated method stub
-                    }
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            positions = position;
+                            spinnerText = (String)spinner.getSelectedItem();
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
 
 
@@ -85,8 +84,13 @@ public class TextViewSpinnerLinerLayout extends LinearLayoutChild{
     }
 
 
+    @Override
+    public double getCalcWidth() {
+        return 0;
+    }
+
     public int getPosition() {
-        return position;
+        return positions;
     }
 
 
@@ -106,19 +110,19 @@ public class TextViewSpinnerLinerLayout extends LinearLayoutChild{
 
     @Override
     public View getFill() {
+
         return null;
     }
 
     @Override
     public double getCalclation() {
         try {
-            double res = Double.parseDouble(spinnerText);
+            double res = Double.parseDouble(spinnerText)/1000;
             Log.d(TAG, "spinner number");
             return res;
-        } catch (NumberFormatException e) {
-            Log.d(TAG, "spinner not number");
-            return 1.0;
-        }
+        } catch (Exception e) {
 
+        }
+        return positions;
     }
 }

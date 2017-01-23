@@ -1,4 +1,4 @@
-package com.storoman.app;
+package com.storoman.app.packageLayout;
 
 import android.text.Editable;
 import android.text.NoCopySpan;

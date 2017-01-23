@@ -1,11 +1,14 @@
-package com.storoman.app;
+package com.storoman.app.packageLayout;
 
 import android.content.Context;
-        import android.text.Editable;
-        import android.util.AttributeSet;
-        import android.widget.EditText;
+import android.text.Editable;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.EditText;
+import com.storoman.app.R;
 
-public class EditTextExtended extends EditText
+
+public class EditTextExtended extends EditText implements TextWatcherExtendedListener
 {
     private TextWatcherExtendedListener  mListeners = null;
 
@@ -61,5 +64,20 @@ public class EditTextExtended extends EditText
         {
             mListeners.afterTextChanged(this, text);
         }
+    }
+
+    @Override
+    public void afterTextChanged(View v, Editable s) {
+        v.setBackgroundResource(R.drawable.rect_text_edir);
+    }
+
+    @Override
+    public void onTextChanged(View v, CharSequence s, int start, int before, int count) {
+        v.setBackgroundResource(R.drawable.rect_text_edir);
+    }
+
+    @Override
+    public void beforeTextChanged(View v, CharSequence s, int start, int count, int after) {
+
     }
 }

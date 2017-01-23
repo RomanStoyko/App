@@ -1,4 +1,4 @@
-package com.storoman.app;
+package com.storoman.app.textViewPackage;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.storoman.app.packageLayout.LinearLayoutChild;
+import com.storoman.app.R;
 
 
-public class TextViewButtonLinerLayout extends LinearLayoutChild{
+public class TextViewButtonLinerLayout extends LinearLayoutChild {
+
 
     private View focus = null;
     private int id;
@@ -49,7 +52,10 @@ public class TextViewButtonLinerLayout extends LinearLayoutChild{
     }
 
 
-
+    @Override
+    public double getCalcWidth() {
+        return 0;
+    }
 
     public View getFocus() {
         return focus;
@@ -62,17 +68,6 @@ public class TextViewButtonLinerLayout extends LinearLayoutChild{
     public Button getButton() {
         return button;
     }
-
-//    @Override
-//    public View getFill() {
-//        if(textView.getText().toString().equals("")){
-//            textView.setBackgroundResource(R.drawable.rect_text_edir_error);
-//            return textView;
-//        }else{
-//            return null;
-//        }
-//
-//    }
 
 
     @Override

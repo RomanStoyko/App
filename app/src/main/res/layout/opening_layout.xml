@@ -12,7 +12,7 @@
         />
 
 
-    <com.storoman.app.EditTextExtended
+    <com.storoman.app.packageLayout.EditTextExtended
         android:focusable="true"
         android:layout_width="60dp"
         android:hint="x.xx"
@@ -35,7 +35,7 @@
         android:textSize="12sp"
         />
 
-    <com.storoman.app.EditTextExtended
+    <com.storoman.app.packageLayout.EditTextExtended
         android:focusable="true"
         android:layout_width="60dp"
         android:hint="x.xx"

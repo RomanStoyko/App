@@ -1,133 +1,86 @@
 package com.storoman.app;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextWatcher;
+import android.os.Handler;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.storoman.app.packageLayout.LevelLayout;
+import com.storoman.app.packageLayout.MansardLevelLayout;
+import com.storoman.app.packageLayout.ResultLayout;
+import com.storoman.app.util.SystemUiHider;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 
 public class MainActivity extends Activity {
 
+
+    private static final int DIALOG_NOFILL = 1;
+    private static final int DIALOG_FULLFLOAR = 2;
+    private static final int DIALOG_FULLMANS = 3;
+
+    /**
+     * Whether or not the system UI should be auto-hidden after
+     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
+     */
+    private static final boolean AUTO_HIDE = true;
+
+    /**
+     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
+     * user interaction before hiding the system UI.
+     */
+    private static final int AUTO_HIDE_DELAY_MILLIS = 5000;
+
+    /**
+     * If set, will toggle the system UI visibility upon interaction. Otherwise,
+     * will show the system UI visibility upon interaction.
+     */
+    private static final boolean TOGGLE_ON_CLICK = false;
+
+    /**
+     * The flags to pass to {@link SystemUiHider#getInstance}.
+     */
+    private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
+
+    /**
+     * The instance of the {@link SystemUiHider} for this activity.
+     */
+    private SystemUiHider mSystemUiHider;
+
+    /**
+     * Schedules a call to hide() in [delay] milliseconds, canceling any
+     * previously scheduled calls.
+     */
+    private void delayedHide(int delayMillis) {
+        mHideHandler.removeCallbacks(mHideRunnable);
+        mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+
+
     private static final String TAG = "MainActivity";
-    public static int levelIndex = 2;
 
-    public static int idNum = 1000;
-    final Map<View, View> layoutMap = new HashMap<>();
-    Map<View, ArrayList<int[]>> arrayListMap  = new HashMap<>();
+    public static Spinner spinerCut;
 
-    ArrayList<int[]> layout1Array = new ArrayList<>();
-    ArrayList<int[]> layout2Array = new ArrayList<>();
-    ArrayList<int[]> layout3Array = new ArrayList<>();
-    ArrayList<int[]> layout4Array = new ArrayList<>();
-    ArrayList<int[]> layout5Array = new ArrayList<>();
-    ArrayList<int[]> layout6Array = new ArrayList<>();
-    ArrayList<int[]> layout7Array = new ArrayList<>();
-    ArrayList<int[]> layout8Array = new ArrayList<>();
-    ArrayList<int[]> layout9Array = new ArrayList<>();
-
-    ArrayList<View> levelOne = new ArrayList<>();
-    ArrayList<View> levelTwo = new ArrayList<>();
-    ArrayList<View> levelThree = new ArrayList<>();
-
-    String text1 = "Объем блоков для наружных стен (толщина блоков: ";
-
-    ArrayList<Double> levelOneDouble = new ArrayList<>();
-    ArrayList<Double> levelTwoDouble = new ArrayList<>();
-    ArrayList<Double> levelThreeDouble = new ArrayList<>();
-//    ArrayList<View> levelfoure = new ArrayList<>();
-//    ArrayList<View> levelMans = new ArrayList<>();
-
-    String spiner11;
-
-    Spinner spnr11, spnr12, spnr13, spnr14, spnr15, spnr16, spnrCut;
-    Spinner spnr21, spnr22, spnr23, spnr24, spnr25, spnr26;
-    Spinner spnr31, spnr32, spnr33, spnr34, spnr35, spnr36;
+    public static ArrayList<LevelLayout> levelLayoutArrayList = new ArrayList<>();// LevelLayout
 
 
     View focus = null;
 
-    double  ds1, ds2, ds3;
-
-
-
-    String[] cutError = {
-        "+0%",
-        "+1%",
-        "+2%",
-        "+3%",
-        "+4%",
-        "+5%",
-        "+6%",
-        "+7%",
-        "+8%",
-        "+9%",
-        "+10%"
-    };
-
-    int i = 1000;
-    String[] wallLength = {
-            "200",
-            "250",
-            "300",
-            "350",
-            "375",
-            "400",
-            "500"
-    };
-    String[] shortWallLength = {
-
-            "300",
-            "350",
-            "375",
-            "400",
-            "500"
-    };
-    String[] bulkLength = {
-            "50",
-            "75",
-            "100",
-            "125",
-            "150",
-            "175",
-            "200"
-    };
-    String[] blockLength = {
-            "75",
-            "100",
-            "150",
-            "200",
-            "250",
-            "300",
-            "375",
-            "400",
-            "500"
-    };
-
-    String[] noYes = {"Нет", "Да"};
+    private AdView adView;
 
 
 
@@ -135,380 +88,261 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE);
         setContentView(R.layout.activity_main);
-        putInMap();
-        putInLevelId();
+
+        final View contentView = findViewById(R.id.fullscreen_content_main);
 
 
+        adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("4BCE90AEA7D1CE6A2CCC5B7A88DDF50A")
+                .build();
+        adView.loadAd(adRequest);
 
-        ArrayAdapter<String> cutErrorAdapter = new ArrayAdapter<String>(this, R.layout.ss, cutError);
-      final  ArrayAdapter<String> wallLenghAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, wallLength);
-      final  ArrayAdapter<String> shortWallLenghAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, shortWallLength);
-        ArrayAdapter<String> bulkLenghAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, bulkLength);
-        ArrayAdapter<String> noYesAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, noYes);
-
-
-        spnr11 = (Spinner) findViewById(R.id.spinner11);
-        spnr11.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        spiner11 = (String)spnr11.getSelectedItem();
-                        ds1 = Double.parseDouble(spiner11)/1000;
-                        // TODO Auto-generated method stub
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
+//        AdView mAdView = (AdView) findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
 
-        spnr12 = (Spinner) findViewById(R.id.spinner12);
-        spnr12.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        ds2 = Double.parseDouble((String)spnr12.getSelectedItem())/1000;
-                        // TODO Auto-generated method stub
-                    }
+        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
+        mSystemUiHider.setup();
+        mSystemUiHider
+                .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
+                    // Cached values.
+                    int mShortAnimTime;
+
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
+                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+                    public void onVisibilityChange(boolean visible) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 
-        spnr13 = (Spinner) findViewById(R.id.spinner13);
-        spnr13.setAdapter(bulkLenghAdapter);
-        spnr13.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        ds3 = Double.parseDouble((String)spnr13.getSelectedItem())/1000;
+                            if (mShortAnimTime == 0) {
+                                mShortAnimTime = getResources().getInteger(
+                                        android.R.integer.config_shortAnimTime);
+                            }
 
-                        // TODO Auto-generated method stub
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
-
-
-        spnr14 = (Spinner)findViewById(R.id.spinner14);
-        spnr14.setAdapter(noYesAdapter);
-        spnr14.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        int position = spnr14.getSelectedItemPosition();
-                        if(position == 0) {
-                            spnr11.setAdapter(wallLenghAdapter);
-                            spnr12.setAdapter(wallLenghAdapter);
                         }
-                        if(position == 1) {
-                            spnr11.setAdapter(shortWallLenghAdapter);
-                            spnr12.setAdapter(shortWallLenghAdapter);
-                        } // TODO Auto-generated method stub
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
-
-        spnr15 = (Spinner)findViewById(R.id.spinner15);
-        spnr15.setAdapter(noYesAdapter);
-        spnr15.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        int position = spnr15.getSelectedItemPosition();
-                        if (position == 1) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.ss, blockLength);
-                            LinearLayout parent = (LinearLayout) findViewById(R.id.spinner16).getParent();
-                            parent.setVisibility(View.VISIBLE);
-                            spnr16 = (Spinner) findViewById(R.id.spinner16);
-                            spnr16.setAdapter(adapter);
-                            spnr16.setOnItemSelectedListener(
-                                    new AdapterView.OnItemSelectedListener() {
-                                        @Override
-                                        public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                                                   int arg2, long arg3) {
-                                            int position = spnr16.getSelectedItemPosition();
-
-                                            // TODO Auto-generated method stub
-                                        }
-
-                                        @Override
-                                        public void onNothingSelected(AdapterView<?> arg0) {
-                                            // TODO Auto-generated method stub
-                                        }
-                                    }
-                            );
-                        } else {
-                            LinearLayout parent = (LinearLayout) findViewById(R.id.spinner16).getParent();
-                            parent.setVisibility(View.GONE);
+                        if (visible && AUTO_HIDE) {
+                            // Schedule a hide().
+                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
                         }
-
-                        // TODO Auto-generated method stub
                     }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
+                });
 
 
 
-        spnrCut = (Spinner)findViewById(R.id.spinnerCut);
-        spnrCut.setAdapter(cutErrorAdapter);
-        spnrCut.setSelection(5);
-        spnrCut.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        int position = spnrCut.getSelectedItemPosition();
+        addLevel();
+        (levelLayoutArrayList.get(0)).setLabelText(String.valueOf(levelLayoutArrayList.size()));
+        if( (levelLayoutArrayList.get(0)).getFirstChaildCount() > 1){//?
+            (levelLayoutArrayList.get(0)).removeLabelButton();
+        }
 
-                        // TODO Auto-generated method stub
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
+
+
+
+        spinerCut = (Spinner) findViewById(R.id.spinnerCut);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.cutError));
+
+        spinerCut.setAdapter(adapter);
+        spinerCut.setSelection(5);
+        spinerCut.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
 
 }
 
-    private void putInLevelId() {
-
-        levelOne.add(0, findViewById(R.id.et11));
-        levelOne.add(1, findViewById(R.id.et12));
-        levelOne.add(2, findViewById(R.id.et13));
-        levelOne.add(3, findViewById(R.id.et14));
-        levelOne.add(4, findViewById(R.id.et15));
-
-
-        levelTwo.add(findViewById(R.id.et21));
-        levelTwo.add(findViewById(R.id.et22));
-        levelTwo.add(findViewById(R.id.et23));
-        levelTwo.add(findViewById(R.id.et24));
-        levelTwo.add(findViewById(R.id.et25));
-
-        levelThree.add(findViewById(R.id.et31));
-        levelThree.add(findViewById(R.id.et32));
-        levelThree.add(findViewById(R.id.et33));
-        levelThree.add(findViewById(R.id.et34));
-        levelThree.add(findViewById(R.id.et35));
-    }
-
-    private void putInMap() {
-        layoutMap.put(findViewById(R.id.button1), findViewById(R.id.addLayout1));
-        arrayListMap.put(findViewById(R.id.button1), layout1Array);
-
-        layoutMap.put(findViewById(R.id.button2), findViewById(R.id.addLayout2));
-        arrayListMap.put(findViewById(R.id.button2), layout2Array);
-
-        layoutMap.put(findViewById(R.id.button3), findViewById(R.id.addLayout3));
-        arrayListMap.put(findViewById(R.id.button3), layout3Array);
-
-        layoutMap.put(findViewById(R.id.button4), findViewById(R.id.addLayout4));
-        arrayListMap.put(findViewById(R.id.button4), layout4Array);
-
-        layoutMap.put(findViewById(R.id.button5), findViewById(R.id.addLayout5));
-        arrayListMap.put(findViewById(R.id.button5), layout5Array);
-
-        layoutMap.put(findViewById(R.id.button6), findViewById(R.id.addLayout6));
-        arrayListMap.put(findViewById(R.id.button6), layout6Array);
-
-        layoutMap.put(findViewById(R.id.button7), findViewById(R.id.addLayout7));
-        arrayListMap.put(findViewById(R.id.button7), layout7Array);
-
-        layoutMap.put(findViewById(R.id.button8), findViewById(R.id.addLayout8));
-        arrayListMap.put(findViewById(R.id.button8), layout8Array);
-
-        layoutMap.put(findViewById(R.id.button9), findViewById(R.id.addLayout9));
-        arrayListMap.put(findViewById(R.id.button9), layout9Array);
-    }
-
 
     public void hide(View view) {
         LinearLayout parent =  (LinearLayout)view.getParent();
-        parent.setVisibility(View.GONE);
-    }
-
-    public void add(View view) {
-        LinearLayout parent = (LinearLayout) layoutMap.get(view);
-        ArrayList<int[]> list = arrayListMap.get(view);
-
-        OpeningLinerLayout oLL = new OpeningLinerLayout(this);
-        parent.addView(oLL);
-        list.add(oLL.getIdEdit());
-
+        ((LinearLayout) parent.getParent()).removeView(parent);
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adView != null) {
+            adView.resume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
+        super.onPause();
+    }
+
+    /** Called before the activity is destroyed. */
+    @Override
+    public void onDestroy() {
+// Destroy the AdView.
+        if (adView != null) {
+            adView.destroy();
+        }
+        levelLayoutArrayList.clear();
+        super.onDestroy();
+    }
+
+
 
     public void finalCalc(View view) {
 
+        LinearLayout parentLay = (LinearLayout) findViewById(R.id.resltList);
+        parentLay.removeAllViews();
+
+        Log.d(TAG, "finalCalc press");
+
+
+        Log.d(TAG, "clear focus view");
         if(focus != null){
-            focus.clearFocus();
+//            focus.clearFocus();
             focus = null;
+       }
+        Log.d(TAG, "Lockig for focus view");
+        for(int i = 0; i < levelLayoutArrayList.size(); i++){
+            View v = levelLayoutArrayList.get(i).getFill();
+            if(null == focus){
+                focus = v;
+            }
+        }
+        if(((LinearLayout) findViewById(R.id.mansard)).getChildCount()>0){
+            View v =  ((MansardLevelLayout)((LinearLayout) findViewById(R.id.mansard)).getChildAt(0)).getFill();
+            if(null == focus){
+                focus = v;
+            }
         }
 
-        Log.d(TAG, "Рассчитать нажат");
-        LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resltList);
+        if(focus != null){
 
 
-        for(int i =0; i< levelOne.size();i++){
-            final EditTextExtended ete = (EditTextExtended)levelOne.get(i);
-           ete.addTextChangedListener(TWlistner);
-            ete.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    focus = ete;
-                }
+            showDialog(DIALOG_NOFILL);
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    ete.setBackgroundResource(R.drawable.rect_text_edir);
-                    focus = ete;
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-            if(((EditTextExtended)levelOne.get(i)).getText().toString().trim().equals("")){
-                levelOne.get(i).setBackgroundResource(R.drawable.rect_text_edir_error);
-                if(focus == null){
-                    focus = findViewById(levelOne.get(i).getId());
+        }
+        Log.d(TAG, "focus == null");
+        if(focus == null){
 
 
-                    Log.d(TAG, "set focus view");
-                }
+            parentLay.removeAllViews();
+            for(int i = 0; i < levelLayoutArrayList.size(); i++){
+               ArrayList<Double> res = levelLayoutArrayList.get(i).getCalcLevel();
+                parentLay.addView(new ResultLayout(this, res, i + 1));
+            }
+            if(((LinearLayout) findViewById(R.id.mansard)).getChildCount()>0){
+                ArrayList<Double> res = ((MansardLevelLayout)((LinearLayout) findViewById(R.id.mansard)).getChildAt(0)).getMansLevel();
+                parentLay.addView(new ResultLayout(this,res));
             }
         }
 
 
-        Iterator<int[]> iterator;
-        if(layout1Array.size()>0) {
-            iterator = layout1Array.iterator();
-            while (iterator.hasNext()) {
-                int[] data = iterator.next();
-                EditText ex1 = (EditText) findViewById(data[0]);
-                EditText ex2 = (EditText) findViewById(data[1]);
-                LinearLayout parent =  (LinearLayout)ex1.getParent();
-                if(parent.getVisibility() == View.GONE || ex1.getText().toString().trim().equals("") && ex2.getText().toString().trim().equals("")) {
-                    hide(ex1);
-                    iterator.remove();
-                } else {
-                    ex1.setBackgroundResource(R.drawable.rect_text_edir);
-                    ex2.setBackgroundResource(R.drawable.rect_text_edir);
-                }
-                if (ex1.getText().toString().trim().equals("")) {
-                    if (focus == null) {
-                        focus =  findViewById(data[0]);
-                    }
-                    ex1.setBackgroundResource(R.drawable.rect_text_edir_error);
-
-                }
-                if (ex2.getText().toString().trim().equals("")) {
-                    if (focus == null) {
-                        focus = findViewById(data[1]);
-                    }
-                    ex2.setBackgroundResource(R.drawable.rect_text_edir_error);
-
-                }
-            }
-
-
-        }
-        if(focus == null) {
-            Log.d(TAG, "focus == null");
-            resultLayout.setVisibility(View.VISIBLE);
-            for(int i = 0; i < levelOne.size(); i++){
-                levelOneDouble.add(i,Double.parseDouble(((EditTextExtended)levelOne.get(i)).getText().toString()));
-            }
-            ((TextView) findViewById(R.id.answer111)).setText(text1 + spiner11 + " мм) м"+ Character.toString((char) 179));
-
-            double res1 = levelOneDouble.get(0) * levelOneDouble.get(1) * levelOneDouble.get(2) * ds1;
-            ((TextView)findViewById(R.id.answer112)).setText(String.valueOf(res1));
-
-            getWindow().setSoftInputMode(EditorInfo.IME_ACTION_DONE);
-
-
-        }else{
-            focus.requestFocus();
-            focus.clearFocus();
-        }
     }
 
 
 
-
-    TextWatcherExtendedListener TWlistner = new TextWatcherExtendedListener() {
-
-
-        @Override
-        public void afterTextChanged(View v, Editable s) {
-
-                v.setBackgroundResource(R.drawable.rect_text_edir);
-
-        }
-
-        @Override
-        public void onTextChanged(View v, CharSequence s, int start, int before, int count) {
-            v.setBackgroundResource(R.drawable.rect_text_edir);
-
-        }
-
-        @Override
-        public void beforeTextChanged(View v, CharSequence s, int start, int count, int after) {
-
-        }
-    };
-
-    public void addLevel(View view) {
+    public void addLevel() {
 
         Log.d(TAG, "addLevel");
        final LinearLayout parentLay = (LinearLayout) findViewById(R.id.addlevel);
 
-        if(levelIndex <= 4) {
-            parentLay.addView(new LevelLayout(this));
-            Log.d(TAG, String.valueOf(levelIndex));
+        if(levelLayoutArrayList.size() <= 3 ) {
+            Log.d(TAG, "array size  " + String.valueOf(levelLayoutArrayList.size()));
+            LevelLayout ll = new LevelLayout(this);
+            levelLayoutArrayList.add(ll);
+            ll.setLabelText(String.valueOf(levelLayoutArrayList.size()));
+            parentLay.addView(ll);
+        }else {
+            showDialog(DIALOG_FULLFLOAR);
         }
 
 
     }
 
     public void addMans(View view) {
-
-        LinearLayout ll = (LinearLayout) findViewById(R.id.mansard);
-        ll.setVisibility(View.VISIBLE);
+        Log.d(TAG, "addMansLevel");
+        if(((LinearLayout) findViewById(R.id.mansard)).getChildCount()<1){
+            ((LinearLayout) findViewById(R.id.mansard)).addView(new MansardLevelLayout(this));
+        }else{
+            showDialog(DIALOG_FULLMANS);
+        }
     }
 
-    public void removeFlore(View view) {
-        LinearLayout parent = (LinearLayout) view.getParent().getParent();
-        parent.setVisibility(View.GONE);
+
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Trigger the initial hide() shortly after the activity has been
+        // created, to briefly hint to the user that UI controls
+        // are available.
+        delayedHide(0);
     }
+
+
+
+    Handler mHideHandler = new Handler();
+    Runnable mHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mSystemUiHider.hide();
+        }
+    };
+
+
+
+    public void addLevel(View view) {
+        addLevel();
+    }
+
+    public static void levelRemove() {
+
+        int position = 0;
+        for(int i = 0; i < levelLayoutArrayList.size();i++){
+            if(levelLayoutArrayList.get(i).getVisibility() == View.GONE){
+                position = i;
+                Log.d(TAG, "position = " + String.valueOf(position));
+            }
+        }
+        levelLayoutArrayList.remove(position);
+        if(levelLayoutArrayList.size()>1) {
+            Log.d(TAG, "rename");
+            for (int i = 0; i < levelLayoutArrayList.size(); i++) {
+                   levelLayoutArrayList.get(i).setLabelText( String.valueOf(i+1));
+            }
+        }
+
+    }
+
+    protected Dialog onCreateDialog(int id) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this, R.style.myBackgroundStyle);
+        adb.setIcon(android.R.drawable.ic_dialog_info);
+        adb.setInverseBackgroundForced(true);
+        if (id == DIALOG_NOFILL) {    adb.setTitle("Не все поля заполнены");   return adb.create();      }
+        if (id == DIALOG_FULLFLOAR) { adb.setTitle("Максимальное количиство Простых этажей");  return adb.create();          }
+        if (id == DIALOG_FULLMANS) {  adb.setTitle("Максимальное количиство Мансардных этажей");  return adb.create();        }
+
+
+        return super.onCreateDialog(id);
+    }
+
 }
